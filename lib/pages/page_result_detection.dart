@@ -1,22 +1,35 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-class PageResultDetection extends StatefulWidget {
-  const PageResultDetection({super.key});
+class PageResultDetection extends StatelessWidget {
+  final Map<String, dynamic> data;
+  final File image;
 
-  @override
-  State<PageResultDetection> createState() => _PageResultDetectionState();
-}
+  const PageResultDetection(
+      {super.key, required this.data, required this.image});
 
-class _PageResultDetectionState extends State<PageResultDetection> {
   @override
   Widget build(BuildContext context) {
+    // Menentukan pesan berdasarkan hasil deteksi
+    String resultMessage;
+    if (data['result'] == 'Normal') {
+      resultMessage = 'Tidak ada tanda-tanda tumor pada citra';
+    } else {
+      resultMessage = 'Terdapat tanda-tanda tumor pada citra';
+    }
+
+    // Mengonversi probabilitas menjadi persentase
+    double probability = data['probability'];
+    String probabilityPercentage = (probability * 100).toStringAsFixed(2);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        title: Text(
+        title: const Text(
           'Detection Tumour',
           style: TextStyle(
             color: Colors.white,
@@ -35,7 +48,7 @@ class _PageResultDetectionState extends State<PageResultDetection> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Padding(
-          padding: const EdgeInsets.only(top: 55, left: 30, right: 30),
+          padding: const EdgeInsets.only(top: 35, left: 30, right: 30),
           child: Column(
             children: [
               Stack(
@@ -45,7 +58,7 @@ class _PageResultDetectionState extends State<PageResultDetection> {
                     width: MediaQuery.of(context).size.width,
                     height: 400,
                     decoration: BoxDecoration(
-                      color: Color(0xFF0099FF),
+                      color: const Color(0xFF0099FF),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
@@ -53,14 +66,54 @@ class _PageResultDetectionState extends State<PageResultDetection> {
                     width: MediaQuery.of(context).size.width - 80,
                     height: 380,
                     decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
+                      color: const Color(0xFFFFFFFF),
                       borderRadius: BorderRadius.circular(30),
                     ),
+                    child: image != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image.file(
+                              image!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          )
+                        : const Center(child: Text('No image selected')),
                   ),
                 ],
               ),
               const SizedBox(
-                height: 25,
+                height: 20,
+              ),
+              const Text(
+                '- Hasil -',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              Text(
+                resultMessage,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              SizedBox(height: 3),
+              Text(
+                '$probabilityPercentage%',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                ),
               ),
             ],
           ),

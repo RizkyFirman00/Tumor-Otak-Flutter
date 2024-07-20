@@ -13,10 +13,10 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: "Tumor Otak",
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF0099FF)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0099FF)),
         useMaterial3: true,
       ),
-      home: SplashScreenPage(),
+      home: const SplashScreenPage(),
       debugShowCheckedModeBanner: false,
     );
   }

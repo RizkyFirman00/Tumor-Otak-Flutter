@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:tumor_otak_flutter/conns.dart';
 import 'package:tumor_otak_flutter/pages/page_detection.dart';
 
 class SplashScreenPage extends StatefulWidget {
@@ -9,6 +11,7 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class _SplashScreenPageState extends State<SplashScreenPage> {
+  @override
   void initState() {
     super.initState();
     _navigateToDetectionPage();
@@ -18,7 +21,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     await Future.delayed(const Duration(seconds: 2), () {});
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => DetectionPage()),
+      MaterialPageRoute(
+        builder: (context) => const DetectionPage(),
+      ),
     );
   }
 
@@ -41,7 +46,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
             height: 200,
             width: 200,
           ),
-        )
+        ),
       ],
     );
   }
